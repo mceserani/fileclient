@@ -61,7 +61,7 @@ public class FileClient {
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 		String userInput = null;
 		File f = null;
-		BufferedReader fileIn = null;
+		DataInputStream fileIn = null;
 		
 		do{
 			try{
@@ -81,10 +81,11 @@ public class FileClient {
 		try{
 			out.writeUTF(f.getName());
 			if(in.readUTF().equals("OK")){
-				fileIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
-				String line = null;
-				while((line = fileIn.readLine()) != null){
-					out.writeUTF(line);
+				fileIn = new DataInputStream(new FileInputStream(f));
+				byte[] buffer = new byte[1024];
+				int len = 0;
+				while((len = fileIn.read(buffer)) != -1){
+					out.write(buffer, 0, len);
 				}
 			}else
 				System.out.println("Server didn't accept file " + userInput + ".");
