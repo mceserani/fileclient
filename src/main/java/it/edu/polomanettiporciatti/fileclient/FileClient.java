@@ -61,6 +61,7 @@ public class FileClient {
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 		String userInput = null;
 		File f = null;
+		BufferedReader fileIn = null;
 		
 		do{
 			try{
@@ -80,7 +81,7 @@ public class FileClient {
 		try{
 			out.writeUTF(f.getName());
 			if(in.readUTF().equals("OK")){
-				BufferedReader fileIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+				fileIn = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
 				String line = null;
 				while((line = fileIn.readLine()) != null){
 					out.writeUTF(line);
@@ -94,6 +95,7 @@ public class FileClient {
 		}finally{
 			try {
 				socket.close();
+				fileIn.close();
 			} catch (IOException e) {
 				System.out.println("Error closing socket.");
 				System.exit(8);
